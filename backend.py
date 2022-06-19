@@ -92,8 +92,6 @@ def write_track_to_database(tx, track:Dict):
     tx.run(command)
 
 
-
-
 #TODO
 def find_collaboration_distance(artist1:str, artist2:str):
     """find min distance between two artists"""
@@ -108,16 +106,11 @@ def find_nearby_artists(artist:str, distace:int=1):
 def populate_database(list_of_artists: List[str]):
     """populates neo4j database with song data of artists"""
     global driver
-
     for artist_name in list_of_artists:
         artist = get_artist(artist_name)
         for track in get_artist_tracks(artist):
-            logger.info(artist)
             with driver.session() as session:
                 session.write_transaction(write_track_to_database, track)
-                # write_track_to_database(track)
-            # print(track)
-        # print(artist)
 
 
 def main():

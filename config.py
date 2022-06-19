@@ -1,0 +1,6 @@
+CLIENT_ID = ""
+CLIENT_SECRET = ""
+
+DB_PASSWORD = ""
+DB_URL = ""
+DB_USERNAME = ""
