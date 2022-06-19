@@ -4,8 +4,6 @@
 import argparse
 import logging
 from typing import List, Set, Tuple, Dict
-import re
-
 
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
