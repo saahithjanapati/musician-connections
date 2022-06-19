@@ -1,26 +1,24 @@
 # some methods are adapted from https://github.com/plamere/spotipy/blob/master/examples/artist_discography.py
 
 #Shows the list of all songs sung by the artist or the band
-import argparse
 import logging
-from typing import List, Set, Tuple, Dict
-
-from spotipy.oauth2 import SpotifyClientCredentials
-import spotipy
-
+from typing import List, Dict
 from neo4j import (
     GraphDatabase,
     basic_auth,
 )
 
-from config import CLIENT_ID, CLIENT_SECRET, DB_URL, DB_USERNAME, DB_PASSWORD
+
+from spotipy.oauth2 import SpotifyClientCredentials
+import spotipy
+
+from tqdm import tqdm
 
 logger = logging.getLogger('artist-connections')
 logging.basicConfig(level='INFO')
 
 # set to true for debugging
-logger.disabled = False     # set to False for debugging info to get printed to console
-
+logger.disabled = True     # set to False for debugging info to get printed to console
 
 def get_artist(name:str) -> Dict:
     """gets dictionary object containing data of artist"""
@@ -61,30 +59,40 @@ def get_artist_tracks(artist:Dict) -> List[Dict]:
 def write_track_to_database(tx, track:Dict):
     """pushes track and associated artists to database"""
     global driver
+
+    table = str.maketrans({
+    "-":  r"\-", 
+    "]":  r"\]", 
+    "\\": r"\\",                  
+     "^":  r"\^", 
+     "$":  r"\$", 
+     "*":  r"\*", 
+     ".":  r"\.",
+     "'": r"\'",
+     '"': r'\"',
+     "’": r'\’'
+     })
+
     logger.info(f"Writing to database: {str(track['name'])}-{str([artist['name'] for artist in track['artists']])}")
     command = ""
 
-    # create track node (hopefully it's unique)
-    command += f"""MERGE (t{track["id"]}:Track {{name:'{track["name"].replace("'", "")}',
+    # create track node
+    command += f"""MERGE (t{track["id"]}:Track {{name:'{track["name"].translate(table)}',
     spotify_id:'{track["id"]}', link:'{track["href"]}'}})"""
 
-
-    # create node if it doesn't exist
+    # create node for artist if it doesn't exist
     for artist in track['artists']:
+        
         artist_id = "".join(artist["name"].split(" "))
-        punc = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
-
         new_id = ""
         for char in artist_id:
             if char.isnumeric():
                 new_id += chr(int(char)+65)    # hack to only have alphabet in id (for artists with numbers in their names)
-            elif char in punc:
-                continue
-            else:
-                new_id += char
+            elif char.isalpha():
+                new_id += char   # add regular characters to the new id, skip anything weird
         
         command += f"""
-        MERGE ({new_id}:Artist {{name:'{artist["name"]}', link:'{artist["external_urls"]["spotify"]}', id:'{artist['id']}'
+        MERGE ({new_id}:Artist {{name:'{artist["name"].replace("'", "")}', link:'{artist["external_urls"]["spotify"]}', id:'{artist['id']}'
         }}) """
         
         command += f"""MERGE ({new_id})-[:PERFORMED_IN]->(t{track["id"]})"""
@@ -103,28 +111,17 @@ def find_nearby_artists(artist:str, distace:int=1):
     pass
 
 
-def populate_database(list_of_artists: List[str]):
+#TODO: once we have flask up and running, make driver and sp part of Flask global context instead of passing as arguments
+def populate_database(list_of_artists: List[str], driver:GraphDatabase.driver, spo:spotipy.Spotify):
     """populates neo4j database with song data of artists"""
-    global driver
-    for artist_name in list_of_artists:
+    # global driver
+    global sp
+    sp = spo
+    for i in tqdm(range(0, len(list_of_artists)), unit=" artist", desc="Populating database"):
+        artist_name = list_of_artists[i]
         artist = get_artist(artist_name)
         for track in get_artist_tracks(artist):
-            with driver.session() as session:
-                session.write_transaction(write_track_to_database, track)
-
-
-def main():
-    TEST_ARTIST_LIST = ["Drake"]
-    populate_database(TEST_ARTIST_LIST)
-
-
-if __name__ == '__main__':
-    global db,driver   # using global variable for db now, switch to Flask g later
-    
-    client_credentials_manager = SpotifyClientCredentials(CLIENT_ID, CLIENT_SECRET)
-    sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-
-    driver = GraphDatabase.driver(DB_URL, auth=basic_auth(DB_USERNAME, DB_PASSWORD))
-    # db = driver.session()
-    main()
-    # db.close()  # close connection
+            # only write tracks with collaborators
+            if len(track['artists']) > 1:
+                with driver.session() as session:
+                    session.write_transaction(write_track_to_database, track)

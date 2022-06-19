@@ -1,0 +1,1 @@
+"""CLI interface to perform same queries we'll do on website and output to terminal"""
