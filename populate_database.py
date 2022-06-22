@@ -7,14 +7,14 @@ from neo4j import (
 )
 
 from config import CLIENT_ID, CLIENT_SECRET, DB_URL, DB_USERNAME, DB_PASSWORD
-from backend import populate_database
+from backend import populate_database, save
 
 FILENAME = "artist_names.txt"
 NUM_ARTISTS = 500   # number of artists to get data for
 # Note that there are 1000 names in the artist_names.txt folder
 
 def main():
-    global driver   # using global variable for db now, switch to Flask g later
+    global sp, driver   # using global variable for db now, switch to Flask g later
 
     # Get list of artist names from the stored .txt file
     artist_list_file = open(FILENAME, "r")
@@ -22,6 +22,7 @@ def main():
     artist_list = file_contents.split("\n")
     artist_list = artist_list[:NUM_ARTISTS] # last element is a blank line
 
+    save(driver, sp)
     populate_database(artist_list, driver, sp)
 
 

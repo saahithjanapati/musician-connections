@@ -75,14 +75,11 @@ def write_track_to_database(tx, track:Dict):
 
     logger.info(f"Writing to database: {str(track['name'])}-{str([artist['name'] for artist in track['artists']])}")
     command = ""
-
     # create track node
     command += f"""MERGE (t{track["id"]}:Track {{name:'{track["name"].translate(table)}',
     spotify_id:'{track["id"]}', link:'{track["href"]}'}})"""
-
     # create node for artist if it doesn't exist
     for artist in track['artists']:
-        
         artist_id = "".join(artist["name"].split(" "))
         new_id = ""
         for char in artist_id:
@@ -100,23 +97,52 @@ def write_track_to_database(tx, track:Dict):
     tx.run(command)
 
 
+# TODO
+def check_artist_exists(artist_name: str):
+    """check if artist exists in database"""
+    global driver
+    def run_query(tx, artist:str):
+        command = f"MATCH (u:Artist {{name: '{artist}'}}) WITH COUNT(u) > 0  as node_exists RETURN node_exists"
+        result = tx.run(command)
+        return result.single()["node_exists"]
+
+    with driver.session() as session:
+        path = session.read_transaction(run_query, artist_name)
+        return path
+    
+
 #TODO
-def find_collaboration_distance(artist1:str, artist2:str):
-    """find min distance between two artists"""
-    pass
+def find_collaboration_path(artist1:str, artist2:str):
+    """find connecting collaboration path between two artists"""
+    global driver
+    
+    def run_query(tx, artist1: str, artist2:str):
+        command = f'MATCH p=shortestPath((a1:Artist {{name:"{artist1}"}})-[*]-(a2:Artist {{name:"{artist2}"}}))RETURN p'
+        result = tx.run(command)
+        
+        result = result.single()
+        if result == None:
+            return None
+        return (result["p"].nodes)
+    
+    with driver.session() as session:
+        path = session.read_transaction(run_query, artist1, artist2)
+        return path
+
 
 #TODO
 def find_nearby_artists(artist:str, distace:int=1):
-    """find artists that are <distance> jumps away from <artist>"""
+    """find artists that are n jumps away from <artist>"""
+    global driver
     pass
 
 
 #TODO: once we have flask up and running, make driver and sp part of Flask global context instead of passing as arguments
-def populate_database(list_of_artists: List[str], driver:GraphDatabase.driver, spo:spotipy.Spotify):
+def populate_database(list_of_artists: List[str]):
     """populates neo4j database with song data of artists"""
     # global driver
     global sp
-    sp = spo
+    global driver
     for i in tqdm(range(0, len(list_of_artists)), unit=" artist", desc="Populating database"):
         artist_name = list_of_artists[i]
         artist = get_artist(artist_name)
@@ -125,3 +151,15 @@ def populate_database(list_of_artists: List[str], driver:GraphDatabase.driver, s
             if len(track['artists']) > 1:
                 with driver.session() as session:
                     session.write_transaction(write_track_to_database, track)
+
+
+def save( driver_:GraphDatabase.driver, sp_:spotipy.Spotify):
+    """temporary utility method to send over db driver and sp connection from whatever file we are running from
+    replace with Flask g once we get that set up
+
+    using this function to expose the driver and sp resources to all the methods in this file
+    """
+    global driver, sp
+    driver = driver_
+    sp = sp_
+
