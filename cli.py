@@ -1,7 +1,7 @@
 """CLI to perform same queries we'll do on website and output to terminal"""
 
 
-from backend import find_collaboration_path, save, check_artist_exists
+from backend import find_collaboration_path, save, check_artist_exists, find_direct_collaborators
 from config import *
 from neo4j import (
     GraphDatabase,
@@ -25,8 +25,6 @@ def collaboration_path():
         print(f"{artist2} was not found in the database")
         return
     
-
-
     path = find_collaboration_path(artist1, artist2)
     if path is None:
         print(f"Path between {artist1} and {artist2} was not found")
@@ -43,37 +41,35 @@ def collaboration_path():
     print(f"{artist1} is {distance} {'track' if distance == 1 else 'tracks'} away from {artist2}")
             
 
-# TODO
-def artist_bubble():
+def direct_collaborations():
     """finds all artists n hops away from artist-of-interest"""
-    print("Not implemented yet!")
+    artist = input("Name of artist: ")
+    if not check_artist_exists(artist):
+        print(f"{artist} was not found in the database")
+        return
+
+    direct_collaborators = find_direct_collaborators(artist)
+    print("Directly connected artists: ")
+    for artist in direct_collaborators:
+        print(artist.get("name"))
     return
 
-
-# TODO
-def holistic_view():
-    """generate graph depicting all data???"""
-    print("Not implemented yet!")
-    return
 
 def main():
     global sp, driver
     save(driver, sp)    # expose driver and spotify connection to backend.py file
     while True:
         print()
-        x = input("""Options\n1 - Find collaboration path\n2 - Create single artist bubble\n3 - Holistic View\n4 - Exit\nYour choice:""")
+        x = input("""Options\n1 - Find collaboration path between two artists\n2 - Direct collaborations of single artist\n3 - Exit\nYour choice: """)
         print()
         if x == "1":
             collaboration_path()
         elif x == "2":
-            artist_bubble()
+            direct_collaborations()
         elif x == "3":
-            holistic_view()
-        elif x=="4":
             sys.exit(0)
         else:
             print("Invalid, please either input either of the following characters: [1,2,3]")
-
 
 
 if __name__ == '__main__':

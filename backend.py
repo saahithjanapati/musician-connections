@@ -55,7 +55,8 @@ def get_artist_tracks(artist:Dict) -> List[Dict]:
                 logger.info('%s. %s', i+1, track['name'])
     return tracks
 
-
+#TODO: Fix special characters in song (currently have an extra slash)
+#TODO: artists are repeated in database, matching fake profiles with same names
 def write_track_to_database(tx, track:Dict):
     """pushes track and associated artists to database"""
     global driver
@@ -97,7 +98,6 @@ def write_track_to_database(tx, track:Dict):
     tx.run(command)
 
 
-# TODO
 def check_artist_exists(artist_name: str):
     """check if artist exists in database"""
     global driver
@@ -111,11 +111,12 @@ def check_artist_exists(artist_name: str):
         return path
     
 
-#TODO
 def find_collaboration_path(artist1:str, artist2:str):
-    """find connecting collaboration path between two artists"""
+    """find connecting collaboration path between two artists
+    make sure to check if both artists exist first
+    returns None if no path is found
+    """
     global driver
-    
     def run_query(tx, artist1: str, artist2:str):
         command = f'MATCH p=shortestPath((a1:Artist {{name:"{artist1}"}})-[*]-(a2:Artist {{name:"{artist2}"}}))RETURN p'
         result = tx.run(command)
@@ -130,12 +131,15 @@ def find_collaboration_path(artist1:str, artist2:str):
         return path
 
 
-#TODO
-def find_nearby_artists(artist:str, distace:int=1):
+def find_direct_collaborators(artist:str):
     """find artists that are n jumps away from <artist>"""
-    global driver
-    pass
-
+    global driver 
+    session = driver.session()
+    result =session.run(f"MATCH (a:Artist {{name:'{artist}'}})-[*2]-(b:Artist) RETURN DISTINCT b")
+    find_direct_collaborators = [record["b"] for record in result]
+    session.close()
+    return find_direct_collaborators
+    
 
 #TODO: once we have flask up and running, make driver and sp part of Flask global context instead of passing as arguments
 def populate_database(list_of_artists: List[str]):
