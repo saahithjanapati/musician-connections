@@ -1,6 +1,10 @@
-# music-collaborations
+# artist-connections
 Analyze collaborations between famous music artists
 
+## Known Issues / Things to Fix
+- Track titles are getting messed up with backslashes before punctuation symbols
+- Artist name inputs are case sensitive (will probably be annoying in the actual app).... Maybe we could have an autocomplete feature??? 
+- Some artists names are repeated in the database (for some reason, it's picking up users with the same names as famous artists)
 
 ## Running locally
 
