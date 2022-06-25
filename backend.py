@@ -30,6 +30,15 @@ def get_artist(name:str) -> Dict:
         return None
 
 
+def get_artist_image_url(name:str) -> str:
+    """get image url for artist"""
+    artist = get_artist(name)
+    if artist and artist['images']:
+        return artist['images'][0]["url"]
+    else:
+        return ""
+
+
 def get_artist_tracks(artist:Dict) -> List[Dict]:
     """get list of artist tracks (tracks are stored as dictionaries)"""
     albums = []

@@ -1,4 +1,4 @@
-from backend import find_collaboration_path, save, check_artist_exists, find_direct_collaborators, count_direct_collaborations
+from backend import find_collaboration_path, save, check_artist_exists, find_direct_collaborators, count_direct_collaborations, get_artist_image_url
 from config import *
 from neo4j import (
     GraphDatabase,
@@ -27,15 +27,15 @@ def collaboration_path():
     return render_template("collaboration-path.html", text=ret_text, data=ret_data)
 
 
-
 @app.route("/single-artist-collaborators", methods=["GET", "POST"])
 def single_artist_collaborators():
     ret_text=""
     ret_data=[]
+    artist1 = None
     if request.method == "POST":
         artist1 = request.form["artist"]
         ret_text, ret_data = direct_collaborations(artist1)
-    return render_template("single-artist-collaborators.html", text=ret_text, data=ret_data)
+    return render_template("single-artist-collaborators.html", text=ret_text, data=ret_data, image_url=get_artist_image_url(artist1) if artist1 != None else "")
 
 
 
@@ -71,7 +71,7 @@ def collaboration_path(artist1:str, artist2:str):
 
     for i in range(len(path)):
         if i%2 == 0:
-            data.append({"data_type":"artist", "name": path[i].get('name')})
+            data.append({"data_type":"artist", "name": path[i].get('name'), "img_url": get_artist_image_url(path[i].get('name')) })
         else:
             data.append({"data_type":"track", "id": path[i].get('spotify_id')})
     
@@ -86,3 +86,4 @@ if __name__ == "__main__":
     driver = GraphDatabase.driver(DB_URL, auth=basic_auth(DB_USERNAME, DB_PASSWORD))
     save(driver, sp)    # expose driver and spotify connection to backend.py file
     app.run(debug=True)
+    

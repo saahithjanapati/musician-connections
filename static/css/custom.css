@@ -1,0 +1,28 @@
+.center {
+    text-align: center;
+  }
+
+  .image_center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 10%;
+  }
+
+
+iframe {
+    width: 100px;
+    height: 50px;
+    margin: 0 auto;
+    background-color: #777;
+}
+
+iframe {
+    display: block;
+    border-style:none;
+}
+
+button {
+    margin: 0 auto;
+    display: block;
+}

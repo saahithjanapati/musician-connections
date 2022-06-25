@@ -1,9 +1,4 @@
-
-
-
 //from https://d3-graph-gallery.com/graph/barplot_horizontal.html
-
-
 
 function barChart(data){
     if(data.length ==0){
@@ -17,8 +12,8 @@ function barChart(data){
 
 // set the dimensions and margins of the graph
 var margin = {top: 20, right: 30, bottom: 40, left: 200},
-    width = 1000 - margin.left - margin.right,
-    height = 1000*(data.length/92) - margin.top - margin.bottom;
+    width = 2000- margin.left - margin.right,
+    height = 1500*(data.length/92) - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 var svg = d3.select("#my_barchart")
@@ -30,7 +25,6 @@ var svg = d3.select("#my_barchart")
           "translate(" + margin.left + "," + margin.top + ")");
 
 // Parse the Data
-// d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/7_OneCatOneNum_header.csv", function(data) {
 
   // Add X axis
   var x = d3.scaleLinear()
@@ -43,7 +37,6 @@ var svg = d3.select("#my_barchart")
       .attr("transform", "translate(-10,0)rotate(-45)")
       .style("text-anchor", "end")
 
-      
 
   // Y axis
   var y = d3.scaleBand()
