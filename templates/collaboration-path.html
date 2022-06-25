@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1>
+    Collaboration Path
+</h1>
+<form method="post">
+  Artist 1: <input name="artist1"/>
+  <br/><br/>
+  Artist 2: <input name="artist2"/>
+  <br/><br/>
+  <button type="submit">Submit</button>
+</form>
+
+    
+    <h2>{{text}}</h2>
+    {% for item in data%}
+    <br>
+    <br>
+
+    {% if item.data_type == "artist" %}
+        {{item.name}}
+    {% elif item.data_type == "track" %}
+       <iframe frameborder='0' noresize='noresize' style='background: transparent; width: 50%; height:50%;' src="https://open.spotify.com/embed/track/{{item.id}}?utm_source=generator"  frameborder="0"></iframe>
+    
+       {% endif %}
+
+    {%endfor%}
+
+
+{% endblock content %}
