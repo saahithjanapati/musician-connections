@@ -139,7 +139,18 @@ def find_direct_collaborators(artist:str):
     find_direct_collaborators = [record["b"] for record in result]
     session.close()
     return find_direct_collaborators
-    
+
+
+def count_direct_collaborations(artist1:str, artist2:str) -> int:
+    """count the number of direct collaborations between artist1 and artist2"""
+    global driver
+    session = driver.session()
+    query = f"""MATCH (a:Artist {{name:'{artist1}'}})-[:PERFORMED_IN]-(t:Track)-[:PERFORMED_IN]-(b:Artist{{name:'{artist2}'}}) RETURN DISTINCT count(t) as num_collabs"""
+    result = session.run(query)
+    num_collabs = result.single()["num_collabs"]
+    session.close()
+    return num_collabs    
+
 
 #TODO: once we have flask up and running, make driver and sp part of Flask global context instead of passing as arguments
 def populate_database(list_of_artists: List[str]):

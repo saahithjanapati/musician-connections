@@ -1,4 +1,4 @@
-from backend import find_collaboration_path, save, check_artist_exists, find_direct_collaborators
+from backend import find_collaboration_path, save, check_artist_exists, find_direct_collaborators, count_direct_collaborations
 from config import *
 from neo4j import (
     GraphDatabase,
@@ -49,9 +49,8 @@ def direct_collaborations(artist:str):
 
     direct_collaborators = find_direct_collaborators(artist)
     data = []
-    for collab in direct_collaborators:
-        data.append(collab.get("name"))
-    
+    for collab in direct_collaborators:        
+        data.append({"name":collab.get("name"), "num_collabs":count_direct_collaborations(artist, collab.get("name"))})
     return f"{artist} has directly collaborated with {len(data)} artists", data
 
 
