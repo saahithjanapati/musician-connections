@@ -1,7 +1,7 @@
 //Adatped from: https://d3-graph-gallery.com/graph/circularpacking_template.html
 
 let width = 1000;
-let height = 1000;
+let height = 500;
 
 // append the svg object to the body of the page
 const svg = d3.select("#my_dataviz")

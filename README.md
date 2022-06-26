@@ -14,10 +14,9 @@ Analyze collaborations between famous musicians
  -->
 [Link to YouTube Video](https://www.youtube.com/watch?v=KpuqFtTYpeQ)
 
-[Link to Heroku Deployment](musician-connections.herokuapp.com/)
+[Link to Heroku Deployment](https://musician-connections.herokuapp.com/)
 
 ## Running locally
-
 
 
 ### Neo4j Database 
@@ -62,3 +61,6 @@ python app.py
 ```
 
 
+
+## Acknowledgements
+Thanks to [Siddharth Lakkoju](https://github.com/sidlakkoju) for feedback on ideas and setting up the Neo4j Aura DB used for the Heroku deployment.
