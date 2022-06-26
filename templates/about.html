@@ -1,0 +1,57 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<div class="navbar">
+    <a style="font-size:1vw"  href="{{url_for('single_artist_collaborators')}}">Direct Collaborators</a>
+    <a style="font-size:1vw"  href="{{url_for('collaboration_path')}}">Collaboration Path</a>
+    <a style="font-size:1vw" class="nav-link active" href="{{url_for('about')}}">About</a>
+ </div>
+
+ <br>
+
+ <div style="font-size:1vw">
+
+
+<h3>Direct Collaborators</h3>
+Input the name of the artist and view pretty graphs displaying that artist's direct collaborators (all artists who performed on a song together with the inputted artist)
+
+<br> 
+<br>
+
+<h3>Collaboration Path</h3>
+View how two artists are connected through their collaborations
+<br>
+<br> 
+
+
+<h3>Usage Tips</h3>
+<ul>
+    <li><b>Artist names must match exactly with the their names listed on Spotify.</b> This includes capitalization and special characters (e.g. "beyonce" won't work, input "Beyoncé" instead).</li>
+    <li>The data on this site may not be entirely accurate. We cannot guarantee that all collaborations and connections will be found because we cannot download all tracks present on Spotify. We have track data of the top ~500 artists from this <a href="https://chartmasters.org/most-streamed-artists-ever-on-spotify/">site</a>.</li>
+    <li>We are using a free Neo4j Aura DB instance to make this app available online. Unfortunately, the database pauses after 3 days of inactivity, so you will probably run into issues. Fortunately, it's not too difficult to get a local version of this app running on your machine. Just follow the instructions on this project's <a href="https://github.com/saahithjanapati/musician-connections">GitHub README</a>.</li>
+</ul> 
+
+
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<!-- <p style="text-align:center"> -->
+<div class="bottom center">
+<h5 style="text-align:center">Thanks to <a href="https://github.com/sidlakkoju">Siddharth Lakkoju</a> for feedback on ideas and setting up the remote Neo4j Aura DB instance</h5>
+<h4 style="text-align:center">Made by <a href="https://github.com/saahithjanapati">Saahith Janapati</a></h4>
+<!-- </p> -->
+</div>
+ </div>
+
+
+
+
+{% endblock content %}

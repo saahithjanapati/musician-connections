@@ -47,6 +47,9 @@ button {
     background-color: green;
 }
 
-/* input, button{
-    margin:0;
-} */
+.bottom{ 
+    position: fixed;     
+    text-align: center;    
+    bottom: 20px; 
+    width: 100%;
+} 

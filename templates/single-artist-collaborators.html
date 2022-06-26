@@ -14,9 +14,10 @@
 <link rel="stylesheet" href="../static/css/custom.css">
 
 <div class="navbar">
-    <a style="font-size:1vw" href="{{url_for('home')}}">Home</a>
     <a style="font-size:1vw" class="nav-link active" href="{{url_for('single_artist_collaborators')}}">Direct Collaborators</a>
     <a style="font-size:1vw" href="{{url_for('collaboration_path')}}">Collaboration Path</a>
+    <a style="font-size:1vw" href="{{url_for('about')}}">About</a>
+
  </div>
 
  <br>
@@ -25,10 +26,13 @@
 <div style="font-size:1vw" class="center">
     <form method="post">
         Artist: <input name="artist" placeholder ="Enter artist name"></input>
-      </form>
+        <br/><br/>
+        <button type="submit">Submit</button>
+
+    </form>
 </div>
 <br>
-    <button class ="center" style="font-size:1vw" type="submit">Submit</button>
+
 
 
 

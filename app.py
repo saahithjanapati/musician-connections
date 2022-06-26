@@ -12,9 +12,7 @@ from flask import *
 from markupsafe import Markup
 app = Flask(__name__)
    
-@app.route("/")
-def home():
-    return render_template("home.html")
+
 
 @app.route("/collaboration-path", methods=["GET", "POST"])
 def collaboration_path():
@@ -23,9 +21,17 @@ def collaboration_path():
     if request.method == "POST":
         artist1 = request.form["artist1"]
         artist2 = request.form["artist2"]
-        ret_text, ret_data = collaboration_path(artist1, artist2)
+        ret_text, ret_data = get_collaboration_path_data(artist1, artist2)
     return render_template("collaboration-path.html", text=ret_text, data=ret_data)
 
+@app.route("/")
+def home():
+    return render_template("about.html")
+
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 @app.route("/single-artist-collaborators", methods=["GET", "POST"])
 def single_artist_collaborators():
@@ -34,7 +40,7 @@ def single_artist_collaborators():
     artist1 = None
     if request.method == "POST":
         artist1 = request.form["artist"]
-        ret_text, ret_data = direct_collaborations(artist1)
+        ret_text, ret_data = get_direct_collaborations_data(artist1)
     return render_template("single-artist-collaborators.html", text=ret_text, data=ret_data, image_url=get_artist_image_url(artist1) if artist1 != None else "")
 
 
@@ -42,7 +48,7 @@ def single_artist_collaborators():
 #######################################################################################################################################
 ### Probably smart to put these methods in another file to clean up??? idk################################
 
-def direct_collaborations(artist:str):
+def get_direct_collaborations_data(artist:str):
     """finds all artists n hops away from artist-of-interest"""
     if not check_artist_exists(artist):
         return f"{artist} was not found in the database", []
@@ -54,7 +60,7 @@ def direct_collaborations(artist:str):
     return f"{artist} has directly collaborated with {len(data)} artists", data
 
 
-def collaboration_path(artist1:str, artist2:str):
+def get_collaboration_path_data(artist1:str, artist2:str):
     """find shortest collaboration path between two artists"""
     if not check_artist_exists(artist1):
         return f"{artist1} was not found in the database", []
