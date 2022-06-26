@@ -1,37 +1,43 @@
 {% extends 'layout.html' %}
 {% block content %}
-<h2 class="center">
+<!-- <h2 class="center">
     Direct Collaborators
-</h2>
+</h2> -->
 
 <!-- Add a svg area, empty -->
 
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v4.js"></script>
 <script src="https://d3js.org/d3.v6.js"></script>
+
+<!-- <link rel="stylesheet" href="../static/css/bootstrap.min.css"> -->
 <link rel="stylesheet" href="../static/css/custom.css">
 
+<div class="navbar">
+    <a style="font-size:1vw" href="{{url_for('home')}}">Home</a>
+    <a style="font-size:1vw" class="nav-link active" href="{{url_for('single_artist_collaborators')}}">Direct Collaborators</a>
+    <a style="font-size:1vw" href="{{url_for('collaboration_path')}}">Collaboration Path</a>
+ </div>
 
-<div style="text-align:center;">
+ <br>
+
+
+<div style="font-size:1vw" class="center">
     <form method="post">
-        Artist: <input name="artist" placeholder ="Enter artist name"/>
-        <!-- <input name="artist" class="form-control" id="exampleInputEmail1" placeholder="Enter artist name"> -->
-      
-        <br/><br/>
-        <button class="center" type="submit">Submit</button>
+        Artist: <input name="artist" placeholder ="Enter artist name"></input>
       </form>
 </div>
-
+<br>
+    <button class ="center" style="font-size:1vw" type="submit">Submit</button>
 
 
 
 <br>
 <img class="image_center" src="{{image_url}}">
-
+<br>
 
 <h2 class="center my_text" >{{text}}</h2>
-<!-- <div id="my_dataviz" class="first"></div>
-<div id="my_barchart" class="second"></div> -->
+
 
 <div style="width:800px;">
     <div id="my_dataviz" style="width:300px; float:left;"></div>

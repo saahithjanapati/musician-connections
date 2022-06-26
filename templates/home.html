@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+
+    <!-- These are absolute trash styles, was just messing around -->
+    <head>
+        <link rel="stylesheet" href="../static/css/lolz.css">
+        <link rel="stylesheet" href="../static/css/styles.css">
+        <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../static/css/custom.css">
+
+    </head>
+
+<title class="center">Artist Connections</title>
+<h1 class="center">Artist Connections</h1>
+<h4 class="center">A tool to explore collaborations between musicians</h4>
+<br>
+
+
+<div class="navbar">
+    <a style="font-size:1vw" class="nav-link active" href="{{url_for('home')}}">Home</a>
+    <a style="font-size:1vw"  href="{{url_for('single_artist_collaborators')}}">Direct Collaborators</a>
+    <a style="font-size:1vw" href="{{url_for('collaboration_path')}}">Collaboration Path</a>
+ </div>
+
+     <br>
+
+
+
+{% block content %}
+{% endblock content %}
+
+</html>

@@ -102,11 +102,5 @@ var svg = d3.select("#my_barchart")
     .style("fill", d => color(d.num_collabs))
 
 
-
-
-
-
-
-
 }
 
