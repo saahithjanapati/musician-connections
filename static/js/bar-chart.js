@@ -39,6 +39,8 @@ function barChart(data){
           .html(d.num_collabs + " collaborations")
           .style("left", (event.x)+20 + "px")
           .style("top", (event.y)+20+ getYPosition()+ "px")
+          .style("color", "black")
+          .style("font-size", "1vw")
       }
       var mouseleave = function(event, d) {
         Tooltip

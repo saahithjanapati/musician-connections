@@ -57,7 +57,8 @@ function circleChart(data){
       .html(d.name + "<br>" + d.num_collabs + " collaborations")
       .style("left", (event.x)+40 + "px")
       .style("top", (event.y)+40+getYPosition() + "px")
-  }
+      .style("color", "black")
+      .style("font-size", "1vw")  }
 
   var mouseleave = function(event, d) {
     Tooltip
