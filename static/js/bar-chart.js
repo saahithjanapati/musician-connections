@@ -10,17 +10,54 @@ function barChart(data){
     });
     data.reverse();
 
+    const color = d3.scaleOrdinal()
+    .range(d3.schemeSet1);
+
+
+    function getYPosition(){
+        var top  = window.pageYOffset || document.documentElement.scrollTop
+        return top;
+      }
+
+
+    const Tooltip = d3.select("#my_barchart")
+    .append("div")
+    .style("opacity", 0)
+    .attr("class", "tooltip")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "2px")
+    .style("border-radius", "5px")
+    .style("padding", "5px")
+
+    const mouseover = function(event, d) {
+        Tooltip
+          .style("opacity", 1)
+      }
+      const mousemove = function(event, d) {
+        Tooltip
+          .html(d.num_collabs + " collaborations")
+          .style("left", (event.x)+20 + "px")
+          .style("top", (event.y)+20+ getYPosition()+ "px")
+      }
+      var mouseleave = function(event, d) {
+        Tooltip
+          .style("opacity", 0)
+      }
+
 // set the dimensions and margins of the graph
-var margin = {top: 20, right: 30, bottom: 40, left: 200},
-    width = 2000- margin.left - margin.right,
-    height = 1500*(data.length/92) - margin.top - margin.bottom;
+var margin = {top: 20, right: 30, bottom: 100, left: 400},
+    width = 1750 - margin.left - margin.right,
+    height = 4000*(data.length/92) - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 var svg = d3.select("#my_barchart")
   .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
+
   .append("g")
+
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
@@ -36,6 +73,7 @@ var svg = d3.select("#my_barchart")
     .selectAll("text")
       .attr("transform", "translate(-10,0)rotate(-45)")
       .style("text-anchor", "end")
+        .style("font", "30px times")
 
 
   // Y axis
@@ -45,6 +83,8 @@ var svg = d3.select("#my_barchart")
     .padding(.1);
   svg.append("g")
     .call(d3.axisLeft(y))
+    .selectAll("text")
+    .style("font", "30px times")
 
   //Bars
   svg.selectAll("myRect")
@@ -55,5 +95,18 @@ var svg = d3.select("#my_barchart")
     .attr("y", function(d) { return y(d.name); })
     .attr("width", function(d) { return x(d.num_collabs); })
     .attr("height", y.bandwidth() )
-    .attr("fill", "#69b3a2")
+    .on("mouseover", mouseover) // What to do when hovered
+    .on("mousemove", mousemove)
+    .on("mouseleave", mouseleave)
+    // .attr("fill", "#69b3a2")
+    .style("fill", d => color(d.num_collabs))
+
+
+
+
+
+
+
+
 }
+

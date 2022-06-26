@@ -29,9 +29,17 @@
 <img class="image_center" src="{{image_url}}">
 
 
-<h2 class="center">{{text}}</h2>
-<div id="my_dataviz" class="center"></div>
-<div id="my_barchart" class="center"></div>
+<h2 class="center my_text" >{{text}}</h2>
+<!-- <div id="my_dataviz" class="first"></div>
+<div id="my_barchart" class="second"></div> -->
+
+<div style="width:800px;">
+    <div id="my_dataviz" style="width:300px; float:left;"></div>
+    <div id="my_barchart" style="width:0px; float:right;"></div>
+  </div>
+  <div style="clear: both;"></div>
+
+
 <script src="../static/js/circle-chart.js"></script>
 <script src="../static/js/bar-chart.js"></script>
 

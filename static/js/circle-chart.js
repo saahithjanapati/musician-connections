@@ -1,7 +1,7 @@
 //Adatped from: https://d3-graph-gallery.com/graph/circularpacking_template.html
 
 let width = 1000;
-let height = 500;
+let height = 1000;
 
 // append the svg object to the body of the page
 const svg = d3.select("#my_dataviz")
@@ -17,7 +17,6 @@ const svg = d3.select("#my_dataviz")
 //     }
 function circleChart(data){
     const color = d3.scaleOrdinal()
-    // .domain(["Asia", "Europe", "Africa", "Oceania", "Americas"])
     .range(d3.schemeSet1);
     console.log(data);
 
@@ -26,11 +25,15 @@ function circleChart(data){
     });
     data.reverse();
 
+    function getYPosition(){
+        var top  = window.pageYOffset || document.documentElement.scrollTop
+        return top;
+      }
 
   // Size scale for countries
   const size = d3.scaleLinear()
     .domain([0, data[0]["num_collabs"]])
-    .range([7,55])  // circle will be between 7 and 55 px wide
+    .range([7,100])  // circle will be between 7 and 55 px wide
 
   // create a tooltip
   const Tooltip = d3.select("#my_dataviz")
@@ -48,12 +51,14 @@ function circleChart(data){
     Tooltip
       .style("opacity", 1)
   }
+
   const mousemove = function(event, d) {
     Tooltip
-      .html('<u>' + d.name + '</u>' + "<br>" + d.num_collabs + " collaborations")
-      .style("left", (event.x/2+20) + "px")
-      .style("top", (event.y/2-30) + "px")
+      .html(d.name + "<br>" + d.num_collabs + " collaborations")
+      .style("left", (event.x)+40 + "px")
+      .style("top", (event.y)+40+getYPosition() + "px")
   }
+
   var mouseleave = function(event, d) {
     Tooltip
       .style("opacity", 0)
@@ -68,7 +73,7 @@ function circleChart(data){
       .attr("r", d => size(d.num_collabs))
       .attr("cx", width / 2)
       .attr("cy", height / 2)
-      .style("fill", d => color(d.name))
+      .style("fill", d => color(d.num_collabs))
       .style("fill-opacity", 0.8)
       .attr("stroke", "black")
       .style("stroke-width", 1)
