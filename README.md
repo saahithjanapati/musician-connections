@@ -2,6 +2,9 @@
 Analyze collaborations between famous musicians
 
 ## Running locally
+[![Musician-Collaborations](https://img.youtube.com/vi/KpuqFtTYpeQ/0.jpg)](https://www.youtube.com/watch?v=KpuqFtTYpeQ)
+
+
 
 ### Neo4j Database 
 Download [Neo4j desktop](https://neo4j.com/download/) and create a database. It can be in a new or preexisting project.
