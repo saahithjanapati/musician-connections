@@ -1,10 +1,5 @@
-# artist-connections
-Analyze collaborations between famous music artists
-
-## Known Issues / Things to Fix
-- Track titles are getting messed up with backslashes before punctuation symbols
-- Artist name inputs are case sensitive (will probably be annoying in the actual app).... Maybe we could have an autocomplete feature??? 
-- Some artists names are repeated in the database (for some reason, it's picking up users with the same names as famous artists)
+# musician-connections
+Analyze collaborations between famous musicians
 
 ## Running locally
 
@@ -43,6 +38,10 @@ Run the populate_database.py script to get data for artists and add it to the Ne
 python populate_database.py
 ```
 
+### Run app.py
+Start the Flask server by running
+```
+python app.py
+```
 
 
-[Planning Doc](https://docs.google.com/document/d/11QZeygbCeInZviqpyPku9D_t70USBIeeOcIpqs62yPA/edit?usp=sharing)
