@@ -1,8 +1,20 @@
 # musician-connections
 Analyze collaborations between famous musicians
 
-[![Musician-Collaborations](https://img.youtube.com/vi/KpuqFtTYpeQ/0.jpg)](https://www.youtube.com/watch?v=KpuqFtTYpeQ)
+<!-- [![Musician-Collaborations](https://img.youtube.com/vi/KpuqFtTYpeQ/0.jpg)](https://www.youtube.com/watch?v=KpuqFtTYpeQ)
+ -->
 
+
+
+![Direct Collaborations](https://github.com/saahithjanapati/musician-connections/blob/main/screenshot.png?raw=true)
+
+![Collaboration Path](https://github.com/saahithjanapati/musician-connections/blob/main/screenshot2.png?raw=true)
+
+<!-- [https://github.com/saahithjanapati/musician-connections/blob/main/screenshot.png?raw=true]
+ -->
+[Link to YouTube Video](https://www.youtube.com/watch?v=KpuqFtTYpeQ)
+
+[Link to Heroku Deployment](musician-connections.herokuapp.com/)
 
 ## Running locally
 
